@@ -1,0 +1,40 @@
+    Tie::Discovery - Perl extension for `Discovery' hashes
+
+    A `discovery' hash is a hash that's designed to help you solve the data
+    dependency problem. It's based on the principle of least work; some
+    times, you may spend a lot of time in your program finding out paths,
+    filenames, operating system specifics, network information and so on
+    that you may not end up using. Discovery hashes allow you to get the
+    data when you need it, and only when you need it.
+
+    To use a discovery hash, first tie a hash as shown above. You will want
+    to keep hold of the object returned by `tie'. You can then add things to
+    discover by calling the `register' method as shown above. The above code
+    `$obj->register("os",\&discover_os);' means that when (and only when!)
+    the value `$config{os}' is fetched, the sub `&discover_os' will be
+    called to find it. The return value of that sub will then be cached to
+    save a look-up next time.
+
+    The real power comes from the fact that you may refer to the tied hash
+    inside of the discovery subroutines. This allows for fast, neat and
+    flexible top-down programming, and helps you avoid hard-coding values.
+    For instance, let us find the OS by calling the uname program.
+
+            $obj->register( os => sub { `$config{path_to_uname}` } );
+
+    Now we need code to find the program itself:
+
+            use File::Spec::Functions;
+            $obj->register( path_to_uname => sub {
+                    foreach (path) {
+                            return catfile($_,"uname") if -x catfile($_,"uname")
+                    }
+                    die "Couldn't even find uname"
+            };
+
+    Fetching `$config{os}' may now need a further call to fetch
+    `$config{path_to_uname}' unless the path is already cached. And, of
+    course, we needn't stop at two levels.
+
+    Fuller examples of this technique are seen in the forthcoming CTAN
+    and SysConf modules.
