@@ -1,7 +1,11 @@
-use ExtUtils::MakeMaker;
-# See lib/ExtUtils/MakeMaker.pm for details of how to influence
-# the contents of the Makefile that is written.
-WriteMakefile(
-    'NAME'	=> 'Tie::Discovery',
-    'VERSION_FROM' => 'Discovery.pm', # finds $VERSION
-);
+#!/usr/bin/perl
+
+use inc::Module::Install;
+
+name		('Tie-Discovery');
+author		('Autrijus Tang <autrijus@autrijus.org>');
+abstract	('Lazily evaluated "discovery" hashes');
+license		('perl');
+version_from	('lib/Tie/Discovery.pm');
+
+WriteAll( sign => 1 );
