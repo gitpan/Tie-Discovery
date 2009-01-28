@@ -1,9 +1,10 @@
 package Tie::Discovery;
 
+use 5.005;
 use strict;
 use vars qw( $VERSION @ISA );
 
-$VERSION = '1.10';
+$VERSION = '1.11';
 @ISA = 'Tie::StdHash';
 
 use Carp;
@@ -21,11 +22,11 @@ sub STORE {
     store(@_);
 }
 
-sub store ($$$) {
+sub store { # ($$$)
     $_[SELF]{ $_[KEY] } = $_[VALUE];
 }
 
-sub register ($$\&) {
+sub register { # ($$\&)
     UNIVERSAL::isa($_[VALUE] => 'CODE')
         or croak "Second argument to register() should be coderef";
     $_[SELF]{ $_[KEY] } = $_[VALUE];
@@ -50,8 +51,8 @@ Tie::Discovery - Lazily evaluated "discovery" hashes
 
 =head1 VERSION
 
-This document describes version 1.10 of Tie::Discovery, released
-September 30, 2004.
+This document describes version 1.11 of Tie::Discovery, released
+January 28, 2009.
 
 =head1 SYNOPSIS
 
@@ -142,18 +143,21 @@ up, you can't usefully return one from your discovery subroutine.
 
 =head1 SEE ALSO
 
-perl(1), L<Tie::Hash>
+L<Scalar::Defer>, in particular its C<lazy()> function that provides a
+viable alternative to this module.
+
+L<Tie::Hash>
 
 =head1 AUTHORS
 
 Simon Cozens <simon@cpan.org>,
-Autrijus Tang E<lt>autrijus@autrijus.orgE<gt>
+Audrey Tang E<lt>cpan@audreyt.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2004 by
+Copyright 2004-2009 by
 Simon Cozens <simon@cpan.org>,
-Autrijus Tang E<lt>autrijus@autrijus.orgE<gt>.
+Audrey Tang E<lt>cpan@audreyt.orgE<gt>.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
